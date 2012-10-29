@@ -2,6 +2,8 @@
 #define WATERBOARD_H
 
 #include <QMainWindow>
+#include <QListWidgetItem>
+
 
 namespace Ui {
 class WaterBoard;
@@ -18,11 +20,18 @@ public:
 private slots:
     void on_pushButtonWatermarkPDF_clicked();
 
-    void on_pushButtonOpenPDF_clicked();
+    void on_pushButtonAddPDF_clicked();
+
+    void on_pushButtonAddDir_clicked();
+
+    void on_pushButtonRemovePDF_clicked();
+
+    void on_listOfPDFs_itemClicked(QListWidgetItem *item);
+
+    void on_pushButtonRemoveAll_clicked();
 
 private:
     Ui::WaterBoard *ui;
-    QString inputfile;
 };
 
 #endif // WATERBOARD_H

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>445</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>50</y>
+      <y>10</y>
       <width>46</width>
       <height>13</height>
      </rect>
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>80</y>
+      <y>30</y>
       <width>46</width>
       <height>13</height>
      </rect>
@@ -44,7 +44,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>110</y>
+      <y>50</y>
       <width>46</width>
       <height>13</height>
      </rect>
@@ -56,9 +56,9 @@
    <widget class="QLineEdit" name="lineEditStudentName">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>50</y>
-      <width>113</width>
+      <x>90</x>
+      <y>10</y>
+      <width>271</width>
       <height>20</height>
      </rect>
     </property>
@@ -66,9 +66,9 @@
    <widget class="QLineEdit" name="lineEditDate">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>80</y>
-      <width>113</width>
+      <x>90</x>
+      <y>30</y>
+      <width>271</width>
       <height>20</height>
      </rect>
     </property>
@@ -76,9 +76,9 @@
    <widget class="QLineEdit" name="lineEditSchool">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>110</y>
-      <width>113</width>
+      <x>90</x>
+      <y>50</y>
+      <width>271</width>
       <height>20</height>
      </rect>
     </property>
@@ -86,9 +86,9 @@
    <widget class="QPushButton" name="pushButtonWatermarkPDF">
     <property name="geometry">
      <rect>
-      <x>274</x>
-      <y>220</y>
-      <width>101</width>
+      <x>10</x>
+      <y>370</y>
+      <width>121</width>
       <height>23</height>
      </rect>
     </property>
@@ -99,33 +99,69 @@
      </size>
     </property>
     <property name="text">
-     <string>Watermark PDF</string>
+     <string>PDFs watermerken</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButtonOpenPDF">
+   <widget class="QPushButton" name="pushButtonAddPDF">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>10</y>
-      <width>75</width>
+      <x>270</x>
+      <y>120</y>
+      <width>121</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>Open PDF</string>
+     <string>PDF toevoegen</string>
     </property>
    </widget>
-   <widget class="QLabel" name="PDFFileNameLabel">
+   <widget class="QPushButton" name="pushButtonAddDir">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>13</y>
-      <width>261</width>
-      <height>20</height>
+      <x>270</x>
+      <y>150</y>
+      <width>121</width>
+      <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>Selected PDF</string>
+     <string>Directory toevoegen</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonRemovePDF">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>180</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PDF verwijderen</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listOfPDFs">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>120</y>
+      <width>256</width>
+      <height>192</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonRemoveAll">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>290</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Alles verwijderen</string>
     </property>
    </widget>
   </widget>

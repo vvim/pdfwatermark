@@ -15,10 +15,7 @@ WaterBoard::WaterBoard(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->pushButtonWatermarkPDF->setDisabled(true);
-    ui->lineEditDate->setDisabled(true);
-    ui->lineEditStudentName->setDisabled(true);
-    ui->lineEditSchool->setDisabled(true);
-    inputfile = "";
+    ui->pushButtonRemovePDF->setDisabled(true);
 }
 
 WaterBoard::~WaterBoard()
@@ -28,9 +25,8 @@ WaterBoard::~WaterBoard()
 
 void WaterBoard::on_pushButtonWatermarkPDF_clicked()
 {
+    // 1. create a watermark to stamp on the PDF:
     QString watermarkfile = "temp_watermark.pdf";
-    QString watermarkfile_rotated = "temp_watermark_rotated.pdf";
-    QString outputfile = inputfile; outputfile.append("-watermark.pdf");
 
     QTextDocument doc;
     //doc.setDefaultStyleSheet("watermark.css"); helpt blijkbaar niet om te printen :-(
@@ -43,7 +39,6 @@ void WaterBoard::on_pushButtonWatermarkPDF_clicked()
     watermarktext.append(ui->lineEditSchool->text());
     watermarktext.append("</font></center>");
     doc.setHtml(watermarktext);
-
 
     QPrinter printer;
     // <vvim> very stupid, but to get the vertical text, I first make it a landscape page, than use PDFtk to rotate it, than watermark
@@ -61,26 +56,43 @@ void WaterBoard::on_pushButtonWatermarkPDF_clicked()
     doc.print(&printer);
     printer.newPage();
 
+    // 2. rotate the watermark so that the stamp will come on the left-handside of the PDF
+    QString watermarkfile_rotated = "temp_watermark_rotated.pdf";
+
+    //QMessageBox msgbox;
+    //msgbox.setText(QDir::currentPath());
+    //msgbox.exec();
+
     QProcess *proc = new QProcess();
     QString program = "pdftk";
-
-    //pdftk %1 background c:\\temp\\file.pdf output output.pdf
-    QStringList arguments;
-    arguments << inputfile << "background" << watermarkfile_rotated << "output" << outputfile;
 
     QStringList arguments_rotate;
     arguments_rotate << watermarkfile << "cat" << "1W" << "output" << watermarkfile_rotated;
 
     proc->execute(program, arguments_rotate);
-    proc->execute(program, arguments);
+
+    // 3. for each pdf in the ListOfPDFs: stamp the watermark onto it
+    while(ui->listOfPDFs->count()>0)
+    {
+        QListWidgetItem *temporary_item = ui->listOfPDFs->takeItem(0);  // takeItem REMOVES and RETURNS, so no extra DELETE needed: http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qlistwidget.html#takeItem
+        QString inputfile = temporary_item->text();
+        QString outputfile = inputfile; outputfile.append("-watermark.pdf");
+
+        //pdftk %1 background c:\\temp\\file.pdf output output.pdf
+        QStringList arguments;
+        arguments << inputfile << "background" << watermarkfile_rotated << "output" << outputfile;
+
+        proc->execute(program, arguments);
+    }
 
     QMessageBox msgbox;
-    msgbox.setText(tr("PDF is nu gewatermerkt en is opgeslagen als ").append(outputfile.toStdString().c_str()));
+    msgbox.setText(tr("PDFs zijn gewatermerkt."));
     msgbox.exec();
+
+    ui->pushButtonWatermarkPDF->setDisabled(true);
 }
 
-
-void WaterBoard::on_pushButtonOpenPDF_clicked()
+void WaterBoard::on_pushButtonAddPDF_clicked()
 {
     // open Dialog Box
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open PDF om te watermerken"), "./", tr("PDF bestanden (*.pdf);;Alle bestanden (*.* *)"));
@@ -88,15 +100,12 @@ void WaterBoard::on_pushButtonOpenPDF_clicked()
     // change label if PDF file was chosen
     if(fileName != NULL)
     {
-        ui->PDFFileNameLabel->setText(fileName);
+        QListWidgetItem *newpdftoadd = new QListWidgetItem(fileName);
+        ui->listOfPDFs->addItem(newpdftoadd);
         // now we can also enable the functionality of the addPageRangeButton and the startCuttingProcessButton (without a PDF file, they are useless)
         ui->pushButtonWatermarkPDF->setEnabled(true);
-        ui->lineEditDate->setEnabled(true);
-        ui->lineEditStudentName->setEnabled(true);
-        ui->lineEditSchool->setEnabled(true);
 
-        ui->statusBar->showMessage(tr("Nieuw PDF-bestand geopend"));
-        inputfile = fileName;
+        ui->statusBar->showMessage(tr("Nieuw PDF-bestand toegevoegd"));
     }
 /*
     DO NOT put an "else". Imagine the scenario that the user has selected a PDF file to cut, than accidentally presses "Open File" again and presses "CANCEL" to correct his error.
@@ -106,4 +115,40 @@ void WaterBoard::on_pushButtonOpenPDF_clicked()
         ui->PDFFileNameLabel->setText(tr("...geen PDF gekozen"));
     }
 */
+}
+
+void WaterBoard::on_pushButtonAddDir_clicked()
+{
+
+}
+
+void WaterBoard::on_pushButtonRemovePDF_clicked()
+{
+    qDeleteAll(ui->listOfPDFs->selectedItems()); // see http://lists.trolltech.com/qt-interest/2007-09/thread00253-0.html
+    ui->listOfPDFs->clearSelection(); // don't show any selection (normally the selection shifts, I want it gone
+    ui->pushButtonRemovePDF->setDisabled(true);
+    ui->statusBar->showMessage(tr("PDF verwijderd."));
+}
+
+void WaterBoard::on_listOfPDFs_itemClicked(QListWidgetItem *item)
+{
+    ui->pushButtonRemovePDF->setEnabled(true);
+}
+
+void WaterBoard::on_pushButtonRemoveAll_clicked()
+{
+    QMessageBox msgBox;
+
+    msgBox.setText(tr("Verwijder alle PDFs."));
+    msgBox.setInformativeText(tr("Ben je zeker dat je de hele lijst wilt wissen?"));
+    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::YesAll);
+    msgBox.setDefaultButton(QMessageBox::Cancel);
+    int ret = msgBox.exec();
+
+    if (ret == QMessageBox::YesAll)
+    {
+        ui->listOfPDFs->clear();
+        ui->pushButtonRemovePDF->setDisabled(true);
+        ui->statusBar->showMessage(tr("Alle PDFs verwijderd."));
+    }
 }
