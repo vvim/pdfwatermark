@@ -117,9 +117,35 @@ void WaterBoard::on_pushButtonAddPDF_clicked()
 */
 }
 
+void WaterBoard::ListFiles(QDir directory, QString fileExtension)
+{
+    // code based on 'momesana': http://www.qtcentre.org/threads/9854-Searching-files-from-directories-amp-its-subdirectories
+    QDir dir(directory);
+    QFileInfoList list = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+    foreach(QFileInfo finfo, list)
+    {
+        if (finfo.suffix() == fileExtension)
+        {
+            QListWidgetItem *newpdftoadd = new QListWidgetItem(finfo.absoluteFilePath());
+            ui->listOfPDFs->addItem(newpdftoadd);
+            // now we can also enable the functionality of the addPageRangeButton and the startCuttingProcessButton (without a PDF file, they are useless)
+            ui->pushButtonWatermarkPDF->setEnabled(true);
+        }
+        if (finfo.isDir())
+        {
+            ListFiles(QDir(finfo.absoluteFilePath()), fileExtension);
+        }
+    }
+}
+
 void WaterBoard::on_pushButtonAddDir_clicked()
 {
+    // open Dialog Box
+    QString dirName = QFileDialog::getExistingDirectory(this, tr("Open folder met PDFs om te watermerken"), "./");
 
+    QDir dir(dirName);
+    ListFiles(dir, "pdf");
+    ui->statusBar->showMessage(tr("PDF-bestanden uit folder en subfolders toegevoegd"));
 }
 
 void WaterBoard::on_pushButtonRemovePDF_clicked()

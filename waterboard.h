@@ -2,6 +2,7 @@
 #define WATERBOARD_H
 
 #include <QMainWindow>
+#include <QDir>
 #include <QListWidgetItem>
 
 
@@ -32,6 +33,8 @@ private slots:
 
 private:
     Ui::WaterBoard *ui;
+
+    void ListFiles(QDir directory, QString fileExtension);
 };
 
 #endif // WATERBOARD_H
