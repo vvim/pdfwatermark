@@ -7,7 +7,7 @@
 #include <QFileDialog>
 #include <QAbstractTextDocumentLayout>
 #include <QMessageBox>
-
+#include <unistd.h>
 
 WaterBoard::WaterBoard(QWidget *parent) :
     QMainWindow(parent),
@@ -35,7 +35,7 @@ void WaterBoard::on_pushButtonWatermarkPDF_clicked()
     watermarktext.append(ui->lineEditStudentName->text());
     watermarktext.append(" (");
     watermarktext.append(ui->lineEditDate->text());
-    watermarktext.append(") * ");
+    watermarktext.append(") ");
     watermarktext.append(ui->lineEditSchool->text());
     watermarktext.append("</font></center>");
     doc.setHtml(watermarktext);
@@ -80,9 +80,22 @@ void WaterBoard::on_pushButtonWatermarkPDF_clicked()
 
         //pdftk %1 background c:\\temp\\file.pdf output output.pdf
         QStringList arguments;
-        arguments << inputfile << "background" << watermarkfile_rotated << "output" << outputfile;
+        arguments << inputfile << "stamp" << watermarkfile_rotated << "output" << outputfile;
 
         proc->execute(program, arguments);
+
+        if(ui->checkBoxOverwriteExistingFile->isChecked())
+        {
+            // 1. check if there indeed was a 'outputfile' created
+            if(QFile::exists(outputfile))
+            {
+                // 2. checkbox "Overwrite" was checked AND the outputfile has really been created
+                //      => remove the inputfile and rename the outpufile to the inputfile.
+                QFile::remove(inputfile);
+                // overwrite the original file
+                QFile::rename(outputfile,inputfile);
+            }
+        }
     }
 
     QMessageBox msgbox;

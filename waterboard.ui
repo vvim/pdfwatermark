@@ -164,6 +164,29 @@
      <string>Alles verwijderen</string>
     </property>
    </widget>
+   <widget class="QCheckBox" name="checkBoxOverwriteExistingFile">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>350</y>
+      <width>381</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <italic>true</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>OVERSCHRIJF het oorspronkelijke bestand, maak GEEN backup</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
