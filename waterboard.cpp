@@ -42,7 +42,7 @@ void WaterBoard::on_pushButtonWatermarkPDF_clicked()
 
     QPrinter printer;
     // <vvim> very stupid, but to get the vertical text, I first make it a landscape page, than use PDFtk to rotate it, than watermark
-    printer.setOrientation(QPrinter::Landscape);
+    printer.setOrientation(QPrinter::Portrait);
 
     // <vvim> to avoid the printing of page numbers (very annoying if you are making a template for a watermark), QPrinter needs a proper paperSize, see http://stackoverflow.com/questions/9430133/page-number-in-qtextdocument-for-envelopes
     QSizeF paperSize;
@@ -67,7 +67,7 @@ void WaterBoard::on_pushButtonWatermarkPDF_clicked()
     QString program = "pdftk";
 
     QStringList arguments_rotate;
-    arguments_rotate << watermarkfile << "cat" << "1W" << "output" << watermarkfile_rotated;
+    arguments_rotate << watermarkfile << "cat" << "1S" << "output" << watermarkfile_rotated;
 
     proc->execute(program, arguments_rotate);
 
