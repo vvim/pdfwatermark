@@ -156,9 +156,12 @@ void WaterBoard::on_pushButtonAddDir_clicked()
     // open Dialog Box
     QString dirName = QFileDialog::getExistingDirectory(this, tr("Open folder met PDFs om te watermerken"), "./");
 
-    QDir dir(dirName);
-    ListFiles(dir, "pdf");
-    ui->statusBar->showMessage(tr("PDF-bestanden uit folder en subfolders toegevoegd"));
+    if(dirName != NULL)
+    {
+        QDir dir(dirName);
+        ListFiles(dir, "pdf");
+        ui->statusBar->showMessage(tr("PDF-bestanden uit folder en subfolders toegevoegd"));
+    }
 }
 
 void WaterBoard::on_pushButtonRemovePDF_clicked()
