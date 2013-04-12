@@ -67,7 +67,7 @@ void WaterBoard::on_pushButtonWatermarkPDF_clicked()
     QString program = "pdftk";
 
     QStringList arguments_rotate;
-    arguments_rotate << watermarkfile << "cat" << "1S" << "output" << watermarkfile_rotated;
+    arguments_rotate << watermarkfile << "cat" << "1W" << "output" << watermarkfile_rotated;
 
     proc->execute(program, arguments_rotate);
 
